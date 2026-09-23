@@ -1,12 +1,5 @@
 <p align="center">
   <img src="/images/wled_logo_akemi.png">
-  <a href="https://github.com/wled-dev/WLED/releases"><img src="https://img.shields.io/github/release/wled-dev/WLED.svg?style=flat-square"></a>
-  <a href="https://raw.githubusercontent.com/wled-dev/WLED/main/LICENSE"><img src="https://img.shields.io/github/license/wled-dev/wled?color=blue&style=flat-square"></a>
-  <a href="https://wled.discourse.group"><img src="https://img.shields.io/discourse/topics?colorB=blue&label=forum&server=https%3A%2F%2Fwled.discourse.group%2F&style=flat-square"></a>
-  <a href="https://discord.gg/QAh7wJHrRM"><img src="https://img.shields.io/discord/473448917040758787.svg?colorB=blue&label=discord&style=flat-square"></a>
-  <a href="https://kno.wled.ge"><img src="https://img.shields.io/badge/quick_start-wiki-blue.svg?style=flat-square"></a>
-  <a href="https://github.com/Aircoookie/WLED-App"><img src="https://img.shields.io/badge/app-wled-blue.svg?style=flat-square"></a>
-  <a href="https://gitpod.io/#https://github.com/wled-dev/WLED"><img src="https://img.shields.io/badge/Gitpod-ready--to--code-blue?style=flat-square&logo=gitpod"></a>
 </p>
 
 # Welcome to WLED! ✨
@@ -15,10 +8,25 @@ A fast and feature-rich firmware for ESP32 microcontrollers to control addressab
 
 Originally created by [Aircoookie](https://github.com/Aircoookie), now maintained by a community of contributors.
 
+## Forked version
+
+This repo is a forked version of WLED with a patch applied to enable longer transition times.
+
+Historically, WLED limits transitions to approximately 65 seconds because the transition duration is stored as milliseconds in a 16-bit unsigned integer, which has a maximum value of 65,535.  If you tried to use a longer transition length, the value would overflow and you'd get unexpectedly short transitions.
+
+This fork changes the duration to a 32-bit integer, enabling transitions of up to 24 hours.
+
+I run this fork on several WLED instances and have found it works well.  With this patch applied, long transitions initiated from Home Assistant work perfectly with no other changes needed.
+
+The author of this patch submitted an upstream PR, but the WLED maintainers have [refused](https://github.com/wled/WLED/pull/5864#issuecomment-5774737342) to entertain the change.  Because this feature is useful to me and runs on all my WLEDs, I plan to  keep this fork up to date with upstream changes on a strictly best-effort basis.  I make no promises that updates will happen timely or at all.  Firmware binaries with this patch applied can be found in [Releases](https://github.com/daguej/WLED/releases).
+
+Note that this patch is currently based off the tip of `main` at the time of writing, so it's a prerelease v17 development version with [many changes since v16.0.1](https://github.com/wled/WLED/compare/v16.0.1...d3dabd013ec08d6b165743a12ddb911dd0f78639).  Use with care, and backup your settings before flashing.
+
+**Important caveat:** The WLED Sync wire protocol also encodes transition durations as 16-bit integers.  Changing that would break compatibility with other WLED devices that aren't running this code.  This patch does not change the sync protocol, so transitions on synced devices remains limited to 65s.
+
 ## 🤝 Contributing
 
-Want to help improve WLED? Awesome! Please skim [CONTRIBUTING.md](CONTRIBUTING.md) first - it covers how we like PRs and issues to look, including our take on AI-assisted contributions.
-If you're an AI coding agent, [AGENTS.md](AGENTS.md) is for you - please read it before modifying any files. 😊
+Most contributions should be made to the [upstream project](https://github.com/wled/WLED).  I will not accept changes unrelated to transition lengths, or those likely to increase the burden of keeping this fork up-to-date.  If you find a bug caused by the changes in this fork, PRs are welcome.
 
 ## ⚙️ Features
 
