@@ -566,6 +566,7 @@ class Segment {
 
     // transition functions
     void stopTransition();                  // ends transition mode by destroying transition structure (does nothing if not in transition)
+    bool freezeTransition();                // replaces old segment with a frozen snapshot of the currently shown transition state
     void updateTransitionProgress() const;  // sets transition progress (0-65535) based on time passed since transition start
     inline void handleTransition() {
       updateTransitionProgress();
@@ -576,6 +577,7 @@ class Segment {
 
     inline static void modeBlend(bool blend)  { Segment::_modeBlend = blend; }  // for isPreviousMode()
     inline static void setClippingRect(int startX, int stopX, int startY = 0, int stopY = 1) { _clipStart = startX; _clipStop = stopX; _clipStartY = startY; _clipStopY = stopY; };
+    static void setTransitionClippingRect(unsigned width, unsigned height, unsigned progress); // sets clipping rectangle for current blending style
     inline static bool isPreviousMode()       { return Segment::_modeBlend; }    // needed for determining CCT/opacity during non-TRANSITION_FADE transition
 
     static void handleRandomPalette();
